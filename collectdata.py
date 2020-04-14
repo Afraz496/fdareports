@@ -36,21 +36,30 @@ def extract_text(soup, url):
         print(text[len(text)-5])
 
     #this code will definitely find the drug name, you need more control over sentence
-    ## TODO: Fix the way to find the paragraph you want on the FDA website
     drugdiscoveryCriterion = re.compile(r'(?<=approval of )(.*?)(?= was | to )',re.M)
     drugname = drugdiscoveryCriterion.findall(approvalsentence)
+
+    #---Exception handling when drug name not found------
+    if drugname == [""]:
+        return
+
     drugstringCondition = 'approval of ' + ' '.join(drugname) + ' to '
     regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
-    print(regexCondition)
     pharmanameCriterion = re.compile(regexCondition,re.M)
     pharmaname = pharmanameCriterion.findall(approvalsentence)
+    if pharmaname == [""]:
+        drugstringCondition = 'approval of ' + ' '.join(drugname) + ' was granted to '
+        pharmanameCriterion = re.compile(regexCondition,re.M)
+        pharmaname = pharmanameCriterion.findall(approvalsentence)
+    #-----Debug Print Suite--------
+    print(regexCondition)
     print(drugstringCondition)
-    print(approvalsentence)
-    print(drugname)
-    print(pharmaname)
+    print("The approval sentence is " + str(approvalsentence))
+    print("The name of the drug is " + str(drugname))
+    print("The name of the pharmacy is " + str(pharmaname))
 
 
-
+#---------------In this portion of the script we will be going over URLS over a certain period------------
 #Gather all the urls
 count = 0
 for i in range(0,60):
