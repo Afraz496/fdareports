@@ -64,7 +64,10 @@ def extract_text(soup, url,count):
         drugdiscoveryCriterion = re.compile(r'(?<=The sponsor of the approved generic version of )(.*?)(?= is )',re.M)
         drugname = drugdiscoveryCriterion.findall(text)
     if drugname == []:
-        drugdiscoveryCriterion = re.compile(r"(?<=Today's approval of the )(.*?)(?= was )",re.M)
+        drugdiscoveryCriterion = re.compile(r"(?<= approval of the )(.*?)(?= was )",re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+    if drugname == []:
+        drugdiscoveryCriterion = re.compile(r"(?<= granted this approval to )(.*?)(?=\.)",re.M)
         drugname = drugdiscoveryCriterion.findall(text)
 
     drugstringCondition = 'The FDA granted approval of ' + ' '.join(drugname) + ' to '
