@@ -77,10 +77,27 @@ def extract_text_archived(soup, url,excel_data_pointer, workbook):
         for br in soup.find_all('br'):
             br.extract()
         try:
+            date_search = soup.find_all("b")
+            print(date_search)
+            for i in range(0,len(date_search)):
+                if date_search[i] == "<b>For Immediate Release:</b>" or date_search[i] == "<b>For Immediate Release: </b>":
+                    date = date_search[i].get_text()
+        except:
+            pass
+        try:
             date_search = soup.find_all("div")
+            print("This is what happens when you get text" + date_search[i].get_text())
             for i in range(0,len(date_search)):
                 if date_search[i] == "<b>For Immediate Release:</b>" or date_search[i] == "<b>For Immediate Release: </b>":
                     date = date_search[i].next_sibling
+
+
+            if date == "":
+                date_search = soup.find_all("div").find_all("strong")
+                for i in range(0,len(date_search)):
+                    if date_search[i] == "<strong>For Immediate Release:</strong>" or date_search[i] == "<strong>For Immediate Release: </strong>":
+                        date = date_search[i].get_text()
+
         except:
             pass
     if date == "":
@@ -89,6 +106,8 @@ def extract_text_archived(soup, url,excel_data_pointer, workbook):
             date = date_search.next_sibling
         except:
             pass
+    if date == "":
+        print(date_search)
 
     print("The date is " + str(date))
     text_copy = text
@@ -138,7 +157,7 @@ def extract_text_archived(soup, url,excel_data_pointer, workbook):
         drugstringCondition = drugstringCondition = 'The FDA granted approval of ' + drugname + ' to '
     else:
         drugstringCondition = 'The FDA granted approval of ' + ' '.join(drugname) + ' to '
-    print(drugname)
+    #print(drugname)
     regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
     try:
         pharmanameCriterion = re.compile(regexCondition,re.M)
@@ -270,13 +289,14 @@ def extract_text_archived(soup, url,excel_data_pointer, workbook):
     print("The date is " + str(date))
     """
     #-------Why certain pharmacy names are not found----------
+    """
     if pharmaname == [] and drugname != []:
         print("The length of the whole HTML is: " + str(len(text_copy)))
         print(approvalsentence)
         print("Drugname: " + str(drugname))
         print(pharmanameCriterion)
         print(url)
-
+        """
     #-----Add data to excel-------
     pharmaname = clean_pharmaname(pharmaname)
     sheet.write(excel_data_pointer,0,pharmaname)
