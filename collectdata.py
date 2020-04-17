@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from bs4 import NavigableString
 import re
 import nltk
 from urllib.parse import urljoin
@@ -43,21 +44,56 @@ def extract_text_archived(soup, url,excel_data_pointer, workbook):
 
     # get text
     text = soup.find_all('p')
+
+
+    #Extract company information
+    try:
+        if text_copy[len(text_copy) - 4] == "":
+            approvalsentence = text_copy[len(text_copy) - 6%len(text_copy)].get_text()
+        else:
+            approvalsentence = text_copy[len(text_copy) - 5%len(text_copy)].get_text()
+    except:
+        text = soup.find_all("div")
+        text_copy = text
+        if text_copy[len(text_copy) - 4] == "":
+            approvalsentence = text_copy[len(text_copy) - 6%len(text_copy)].get_text()
+        else:
+            approvalsentence = text_copy[len(text_copy) - 5%len(text_copy)].get_text()
+
     #find the date:
+    date = ""
     try:
         date = soup.find("div", {"class": "release-date"}).find("div", {"class": "col-md-9"}).get_text()
     except:
-        date = soup.find('strong').get_text()
+        date_search = soup.find_all('strong')
+        for i in range(0,len(date_search)):
+            if date_search[i] == "<strong>For Immediate Release:</strong>" or date_search[i] == "<strong>For Immediate Release: </strong>":
+                date = date_search[i].get_text()
+
+
+    #-----Exception handling for the 2013-2014 data-------
+    if date == "":
+        #Clean out </br> tags
+        for br in soup.find_all('br'):
+            br.extract()
+        try:
+            date_search = soup.find_all("div")
+            for i in range(0,len(date_search)):
+                if date_search[i] == "<b>For Immediate Release:</b>" or date_search[i] == "<b>For Immediate Release: </b>":
+                    date = date_search[i].next_sibling
+        except:
+            pass
+    if date == "":
+        try:
+            date_search = soup.find('strong')
+            date = date_search.next_sibling
+        except:
+            pass
+
+    print("The date is " + str(date))
     text_copy = text
-
+    print("The length of text copy is " + str(len(text_copy)))
     text = clean_text(text)
-
-    #Extract company information
-    if text_copy[len(text_copy) - 4] == "":
-        approvalsentence = text_copy[len(text_copy) - 6].get_text()
-    else:
-        approvalsentence = text_copy[len(text_copy) - 5].get_text()
-
     #this code will definitely find the drug name, you need more control over sentence
     drugdiscoveryCriterion = re.compile(r'(?<=The FDA granted approval of )(.*?)(?= was | to )',re.M)
     drugname = drugdiscoveryCriterion.findall(text)
@@ -462,7 +498,8 @@ def extract_archive_byURL(url,sheet,excel_data_pointer):
     archivepageURL = "https://wayback.archive-it.org"
     for i in range(1, 5):
         fdapage = requests.get(url+"?Page="+str(i))
-        soup = BeautifulSoup(fdapage.content,'lxml')
+        fdapage = fdapage.content
+        soup = BeautifulSoup(fdapage,'html5lib')
         urls = soup.find_all('a',href=True)
         for i in range(0, len(urls)):
             if check_approval_sentence(urls[i].get_text()):
@@ -513,14 +550,14 @@ for i in range(0,69):
 #-----TODO: Add a script on 2013-2017 data------------
 url_2017 = "https://wayback.archive-it.org/7993/20190422152747/https://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/2017/default.htm"
 #This part will extract 2013-2017 data
-excel_data_pointer = extract_archive_byURL(url_2017,sheet,excel_data_pointer)
+#excel_data_pointer = extract_archive_byURL(url_2017,sheet,excel_data_pointer)
 #This part will extract 2013-2016
 url_2016 = "https://wayback.archive-it.org/7993/20170111002425/http://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/2016/default.htm"
 url_2015 = "https://wayback.archive-it.org/7993/20170111002435/http://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/2015/default.htm"
 url_2014 = "https://wayback.archive-it.org/7993/20170111002446/http://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/2014/default.htm"
 url_2013 = "https://wayback.archive-it.org/7993/20170111002457/http://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/2013/default.htm"
-excel_data_pointer = extract_archive_byURL(url_2016,sheet,excel_data_pointer)
-excel_data_pointer = extract_archive_byURL(url_2015,sheet,excel_data_pointer)
+#excel_data_pointer = extract_archive_byURL(url_2016,sheet,excel_data_pointer)
+#excel_data_pointer = extract_archive_byURL(url_2015,sheet,excel_data_pointer)
 excel_data_pointer = extract_archive_byURL(url_2014,sheet,excel_data_pointer)
 excel_data_pointer = extract_archive_byURL(url_2013,sheet,excel_data_pointer)
 #Extract the text in each URL and build the Text classification tool
