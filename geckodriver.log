@@ -2184,7 +2184,8 @@ JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/j
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
-1587605227479	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofileZ7u3ZE"
+JavaScript error: resource:///actors/AboutReaderChild.jsm, line 95: NS_ERROR_UNEXPECTED: 
+firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofileZ7u3ZE"
 1587605227720	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
 1587605227737	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
 1587605227737	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
@@ -2197,7 +2198,8 @@ JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/j
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
-1587605265903	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofile5mF50F"
+JavaScript error: resource:///actors/AboutReaderChild.jsm, line 95: NS_ERROR_UNEXPECTED: 
+firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofile5mF50F"
 1587605266140	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
 1587605266155	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
 1587605266155	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
@@ -2210,7 +2212,8 @@ JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/j
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
-1587605307841	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofileVFwcbF"
+JavaScript error: resource:///actors/AboutReaderChild.jsm, line 95: NS_ERROR_UNEXPECTED: 
+firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofileVFwcbF"
 1587605308201	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
 1587605308218	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
 1587605308218	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
@@ -2223,7 +2226,8 @@ JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/j
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
-1587605348025	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofilemTY3UW"
+JavaScript error: resource:///actors/AboutReaderChild.jsm, line 95: NS_ERROR_UNEXPECTED: 
+firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofilemTY3UW"
 1587605348268	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
 1587605348284	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
 1587605348284	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
@@ -2236,7 +2240,8 @@ JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/j
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
-1587605384782	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofileNxk9Ve"
+JavaScript error: resource:///actors/AboutReaderChild.jsm, line 95: NS_ERROR_UNEXPECTED: 
+firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofileNxk9Ve"
 1587605385043	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
 1587605385061	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
 1587605385061	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
@@ -2249,7 +2254,8 @@ JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/j
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
-1587605422718	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofileHTMu70"
+JavaScript error: resource:///actors/AboutReaderChild.jsm, line 95: NS_ERROR_UNEXPECTED: 
+firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofileHTMu70"
 1587605422966	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
 1587605422981	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
 1587605422981	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
@@ -2262,7 +2268,8 @@ JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/j
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
-1587605459880	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofile0SqmP4"
+JavaScript error: resource:///actors/AboutReaderChild.jsm, line 95: NS_ERROR_UNEXPECTED: 
+firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kingm\\AppData\\Local\\Temp\\rust_mozprofile0SqmP4"
 1587605460137	addons.webextension.doh-rollout@mozilla.org	WARN	Loading extension 'doh-rollout@mozilla.org': Reading manifest: Invalid extension permission: networkStatus
 1587605460153	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
 1587605460153	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: telemetry
@@ -2275,3 +2282,4 @@ JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/j
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
 JavaScript warning: https://www.accessdata.fda.gov/scripts/includes/responsive/js/js_jquery_10.js, line 2: Using //@ to indicate sourceMappingURL pragmas is deprecated. Use //# instead
+JavaScript error: resource:///actors/AboutReaderChild.jsm, line 95: NS_ERROR_UNEXPECTED: 

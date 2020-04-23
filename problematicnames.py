@@ -12,7 +12,7 @@ import pandas as pd
 from xlwt import Workbook
 
 def check_approval_sentence(text):
-    if "approves" in text or "Approval" in text or "approve" in text or "approval" in text or "granted" in text:
+    if "approves" in text or "Approval" in text or "approve" in text or "approval" in text or "granted" in text or "distributed" in text or "marketed" in text or "manufactured" in text or "made" in text or "developed" in text:
         return True
     return False
 
@@ -59,10 +59,12 @@ def extract_data(df,url):
                 if check_approval_sentence(text_copy[i].get_text()):
                     approvalsentence = text_copy[i].get_text()
                     pharmaname = findPharmaName(df, approvalsentence)
-                    if pharmaname == "":
-                        pharmaname = findPharmaNamebyfirstname(df,approvalsentence)
+
                     if pharmaname != "":
                         break
+        for i in range(0, len(text_copy)):
+            pharmaname = findPharmaName(df,text_copy[i].get_text())
+        if pharmaname == "":
             pharmaname = "Not Found"
     if pharmaname == "Not Found":
         while(pharmaname == "Not Found"):
@@ -74,6 +76,7 @@ def extract_data(df,url):
                         break
             pharmaname = "Not Found Again"
     print("My pharmacy name is " + pharmaname)
+    print("URL is " + url)
 
 data = pd.read_excel("listofpharmacies.xls")
 df = data['Pharmacy Name'].values.tolist()
