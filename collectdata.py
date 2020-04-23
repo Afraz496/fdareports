@@ -12,13 +12,19 @@ import pandas as pd
 from xlwt import Workbook
 
 
-
 def findPharmaName(pharmanames, text):
     for i in range(0, len(pharmanames)):
-        if pharmanames[i] in text:
+        if pharmanames[i].upper() in text.upper():
             return pharmanames[i]
     return ""
 
+def findPharmaNamebyfirstname(pharmanames,text):
+    for i in range(0,len(pharmanames)):
+        firstname = pharmanames[i].split(' ')
+        firstname = firstname[0]
+        if firstname.upper() in text.upper():
+             return pharmanames[i]
+    return "Not Found"
 def extract_pharmaname_archived(drugname, text,approvalsentence):
     #------------Finding the name of the pharmaceutical from the text-------------
         if drugnameLong == True:
@@ -328,12 +334,12 @@ def check_priority_review(text):
     return False
 
 def check_side_effects_sentence(text):
-    if "side effects" in text or "adverse effects" in text or "Side effects" in text or "Adverse effects" in text or "adverse reactions" in text or "Adverse reactions" in text:
+    if "side effects" in text or "adverse effects" in text or "Side effects" in text or "Adverse effects" in text or "adverse reactions" in text or "Adverse reactions" in text or "risk" in text or "adverse drug reactions" in text or "Adverse drug reactions" in text:
         return True
     return False
 
 def lexicon_analysis(text):
-    word_weight_dictionary = {"constipation": 2, "rash": 2,"anaemia": 3, "diarrhea":2, "dizziness": 2, "drowsiness":2, "headache": 2, "insomnia": 2,"nausea": 2, "fatigue" : 2, "sleeping": 2,"pain": 4, "fever": 5,"hyperphosphatemia": 3,"hypophosphatemia": 3,"hepatotoxicity": 10, "suicidal": 10,"harm": 4, "death": 100 }
+    word_weight_dictionary = {"constipation": 2, "rash": 2,"anaemia": 3, "diarrhea":2, "dizziness": 2, "drowsiness":2, "headache": 2, "insomnia": 2,"nausea": 2, "vomiting": 2, "fatigue" : 2, "sleeping": 2,"pain": 4, "fever": 5,"hyperphosphatemia": 3,"hypophosphatemia": 3,"hepatotoxicity": 10, "suicidal": 10,"harm": 4, "death": 100 }
     stop_words=set(stopwords.words("english"))
     tokenized_word = word_tokenize(text)
     filtered_sent=[]
@@ -494,6 +500,16 @@ def extract_text_archived(soup, url,excel_data_pointer, workbook):
                     if pharmaname != "":
                         break
             pharmaname = "Not Found"
+    if pharmaname == "Not Found":
+        while(pharmaname == "Not Found"):
+            for i in range(0, len(text_copy)):
+                if check_approval_sentence(text_copy[i].get_text()):
+                    approvalsentence = text_copy[i].get_text()
+                    print(approvalsentence)
+                    pharmaname = findPharmaNamebyfirstname(df, approvalsentence)
+                    if pharmaname != "Not Found":
+                        break
+            pharmaname = "Not Found Again"
     #-----Debug Print Suite--------
     """
     print("The name of the drug is " + str(drugname))
@@ -635,7 +651,7 @@ sheet.write(0,4,'Priority Review')
 excel_data_pointer = 1
 
 #-----Read the names of all the pharmaceutical companies--------
-data = pd.read_excel("pharmanames.xlsx")
+data = pd.read_excel("listofpharmacies.xls")
 df = data['Pharmacy Name'].values.tolist()
 print(df)
 
