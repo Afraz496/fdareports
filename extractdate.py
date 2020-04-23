@@ -10,7 +10,9 @@ from xlwt import Workbook
 
 def extract_date(url):
     fdapage = requests.get(url)
-    soup = BeautifulSoup(fdapage.content,'lxml')
+    fdapage = fdapage.content
+    soup = BeautifulSoup(fdapage,'lxml')
+    # kill all script and style elements
     for script in soup(["script", "style"]):
         script.extract()    # rip it out
 
@@ -41,16 +43,56 @@ def extract_date(url):
         for i in range(0,len(date_search)):
             if date_search[i] == "<strong>For Immediate Release:</strong>" or date_search[i] == "<strong>For Immediate Release: </strong>":
                 date = date_search[i].get_text()
+
+
+    #-----Exception handling for the 2013-2014 data-------
+
     if date == "":
-        date_search = soup.find_all('strong')
-        for i in range(0,len(date_search)):
-            print(date_search[i].get_text())
-            print(date_search[i].next_sibling)
-            if date_search[i].get_text() == "For Immediate Release:\n" or date_search[i].get_text() == "For Immediate Release: \n" or date_search[i] == "<strong>For Immediate Release:\n</strong>" or date_search[i] == "<strong>For Immediate Release: \n</strong>":
-                print("Hello")
+        #Clean out </br> tags
+        for br in soup.find_all('br'):
+            br.extract()
+        try:
+            date_search = soup.find_all("b")
+            for i in range(0,len(date_search)):
+                if date_search[i] == "<b>For Immediate Release:</b>" or date_search[i] == "<b>For Immediate Release: </b>":
+                    date = date_search[i].get_text()
+        except:
+            pass
+
+        try:
+            date_search = soup.find_all("div")
+
+            for i in range(0,len(date_search)):
+                if date_search[i] == "<b>For Immediate Release:</b>" or date_search[i] == "<b>For Immediate Release: </b>":
+                    date = date_search[i].next_sibling
+
+            if date == "":
+                date_search = soup.find("div", {"class": "main"}).find_all("div")
+                date_search = str(date_search)
+
+                date_writtenCriterion = re.compile(r'(?<=<div>For Immediate Release: )(.*?)(?=</div>)',re.M)
+                date = date_writtenCriterion.findall(date_search)
+                date = date[0]
+                date = str(date)
+
+            if date == "":
+                date_search = soup.find_all("div").find_all("strong")
+                for i in range(0,len(date_search)):
+                    if date_search[i] == "<strong>For Immediate Release:</strong>" or date_search[i] == "<strong>For Immediate Release: </strong>":
+                        date = date_search[i].get_text()
+
+        except:
+            pass
+    if date == "":
+        try:
+            date_search = soup.find('strong')
+            date = date_search.next_sibling
+        except:
+            pass
+    if date == "":
+        print(date_search)
 
     print("The date is " + str(date))
-    text_copy = text
 
 
-extract_date("https://wayback.archive-it.org/7993/20170112023834/http://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/ucm396585.htm")
+extract_date("https://wayback.archive-it.org/7993/20170112023900/http://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/ucm345528.htm")

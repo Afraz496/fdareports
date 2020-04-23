@@ -1,0 +1,78 @@
+import datetime
+import time
+import requests
+from bs4 import BeautifulSoup
+import re
+import selenium.webdriver as webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.action_chains import ActionChains
+from lxml import etree
+from lxml import html
+import xlwt
+from xlwt import Workbook
+import json
+
+def mainpagelogic(excel_data_pointer, browser, url, month, year):
+    browser.get(url)
+    dropdown = browser.find_element_by_xpath("//*[@id='mp-pusher']/div/div/div/div/div[3]/div/div[5]/div[1]/h4/a")
+    wait = WebDriverWait(browser, 10)
+    location = dropdown.location
+    x_offset = location['x']
+    y_offset = location['y']
+    dropdown.click()
+    try:
+        myElem = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.ID, 'reportSelectMonth')))
+    except TimeoutException:
+        print("Loading took too much time!")
+    select_month = Select(browser.find_element_by_id('reportSelectMonth'))
+    wait = WebDriverWait(browser, 10)
+    select_month.select_by_visible_text(month)
+    select_year = Select(browser.find_element_by_id('reportSelectYear'))
+    select_year.select_by_visible_text(year)
+    search_box = browser.find_element_by_xpath('/html/body/div[2]/div/div/div/div/div/div[3]/div/div[5]/div[2]/div/form/div[7]/div/button[1]')
+    browser.execute_script("arguments[0].scrollIntoView();", search_box)
+    search_box.click()
+    browser.find_element_by_xpath("/html/body/div[2]/div/div/div/div/div/div[3]/div/form/div[4]/div[1]/a[1]").click()
+
+
+def extractPharmanames(url, year, sheet):
+    excel_data_pointer = 1 #inisitialise excel sheet pointer
+    #Uncomment me to use PhantomJS
+    """
+    browser = webdriver.PhantomJS("C://Users//kingm//Desktop//UBC//ssrnextraction//phantomjs-2.1.1-windows//bin//phantomjs.exe")
+    browser.set_window_size(1120, 550)
+    options = webdriver.ChromeOptions()
+    options.add_argument("start-maximized");
+    options.add_argument("disable-infobars")
+    options.add_argument("--disable-extensions")
+    browser = webdriver.Chrome(chrome_options=options)
+    ac = ActionChains(browser)
+    """
+    month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    fp = webdriver.FirefoxProfile()
+    fp.set_preference("browser.preferences.instantApply",True)
+    fp.set_preference('browser.helperApps.neverAsk.saveToDisk', 'application/download, text/xlsx, text/csv')
+    fp.set_preference("browser.helperApps.alwaysAsk.force",False)
+    fp.set_preference("browser.download.manager.showWhenStarting",False)
+    fp.set_preference("browser.download.folderList",0)
+    browser = webdriver.Firefox(fp)
+    for i in range(0, len(month)):
+        mainpagelogic(excel_data_pointer, browser, url, month[i], year)
+        browser.back()
+
+
+#-----Create excel workbook and sheet----
+wb = Workbook()
+
+sheet = wb.add_sheet('Pharmacy Names')
+#Create column names
+sheet.write(0,0,'URL')
+sheet.write(0,1,'Pharmacy Name')
+url = "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm"
+for i in range(2013,2021):
+    extractPharmanames(url,str(i), sheet)

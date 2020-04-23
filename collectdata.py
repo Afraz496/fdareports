@@ -6,16 +6,348 @@ import nltk
 from urllib.parse import urljoin
 from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
+from nltk.corpus import stopwords
 import xlwt
+import pandas as pd
 from xlwt import Workbook
 
+
+
+def findPharmaName(pharmanames, text):
+    for i in range(0, len(pharmanames)):
+        if pharmanames[i] in text:
+            return pharmanames[i]
+    return ""
+
+def extract_pharmaname_archived(drugname, text,approvalsentence):
+    #------------Finding the name of the pharmaceutical from the text-------------
+        if drugnameLong == True:
+            drugstringCondition = drugstringCondition = 'The FDA granted approval of ' + drugname + ' to '
+        else:
+            drugstringCondition = 'The FDA granted approval of ' + ' '.join(drugname) + ' to '
+        #print(drugname)
+        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
+        try:
+            pharmanameCriterion = re.compile(regexCondition,re.M)
+            pharmaname = pharmanameCriterion.findall(text)
+        except:
+            pharmaname = [" "]
+        #-------Exception handling when drug name not found----------
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = ' approval of ' + drugname + ' was granted to '
+            else:
+                drugstringCondition = ' approval of ' + ' '.join(drugname) + ' was granted to '
+            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
+            pharmanameCriterion = re.compile(regexCondition,re.M)
+            pharmaname = pharmanameCriterion.findall(text)
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = 'The FDA granted the approval of ' + drugname + ' to '
+            else:
+                drugstringCondition = 'The FDA granted the approval of ' + ' '.join(drugname) + ' to '
+            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
+            pharmanameCriterion = re.compile(regexCondition,re.M)
+            pharmaname = pharmanameCriterion.findall(text)
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = 'The FDA granted Priority Review of ' + drugname + ' to '
+            else:
+                drugstringCondition = 'The FDA granted Priority Review of ' + ' '.join(drugname) + ' to '
+            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
+            pharmanameCriterion = re.compile(regexCondition,re.M)
+            pharmaname = pharmanameCriterion.findall(text)
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = ' the approved generic version of ' + drugname + ' is '
+            else:
+                drugstringCondition = ' the approved generic version of ' + ' '.join(drugname) + ' is '
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = ' FDA granted approvals of ' + drugname + ' to '
+            else:
+                drugstringCondition = ' FDA granted approvals of ' + ' '.join(drugname) + ' to '
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = 'The sponsor of the approved generic version of ' + drugname + ' is '
+            else:
+                drugstringCondition = 'The sponsor of the approved generic version of ' + ' '.join(drugname) + ' is '
+            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
+            pharmanameCriterion = re.compile(regexCondition,re.M)
+            pharmaname = pharmanameCriterion.findall(text)
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = 'Approval of ' + drugname + ' was granted to '
+            else:
+                drugstringCondition = 'Approval of ' + ' '.join(drugname) + ' was granted to '
+            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
+            pharmanameCriterion = re.compile(regexCondition,re.M)
+            pharmaname = pharmanameCriterion.findall(text)
+            if len(pharmaname) > 1:
+                pharmaname = pharmanameCriterion.findall(approvalsentence)
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = 'Approval of ' + drugname + ' were granted to '
+            else:
+                drugstringCondition = 'Approval of ' + ' '.join(drugname) + ' were granted to '
+            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
+            pharmanameCriterion = re.compile(regexCondition,re.M)
+            pharmaname = pharmanameCriterion.findall(text)
+            if len(pharmaname) > 1:
+                pharmaname = pharmanameCriterion.findall(approvalsentence)
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = ' approval of ' + drugname + ' was granted to '
+            else:
+                drugstringCondition = ' approval of ' + ' '.join(drugname) + ' was granted to '
+            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
+            pharmanameCriterion = re.compile(regexCondition,re.M)
+            pharmaname = pharmanameCriterion.findall(text)
+            if len(pharmaname) > 1:
+                pharmaname = pharmanameCriterion.findall(approvalsentence)
+            if pharmaname == []:
+                if drugnameLong == True:
+                    drugstringCondition = ' approval of the ' + drugname + ' was granted to '
+                else:
+                    drugstringCondition = ' approval of the ' + ' '.join(drugname) + ' was granted to '
+                regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
+                pharmanameCriterion = re.compile(regexCondition,re.M)
+                pharmaname = pharmanameCriterion.findall(text)
+                if len(pharmaname) > 1:
+                    pharmaname = pharmanameCriterion.findall(approvalsentence)
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = 'Approvals of ' + drugname + ' were granted to '
+            else:
+                drugstringCondition = 'Approvals of ' + ' '.join(drugname) + ' were granted to '
+            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
+            pharmaname = pharmanameCriterion.findall(text)
+            if len(pharmaname) > 1:
+                pharmaname = pharmanameCriterion.findall(approvalsentence)
+        if pharmaname == []:
+            regexCondition = r'(?<=\.)(.*?)(?= holds the application )'
+            pharmaname = pharmanameCriterion.findall(text)
+            if len(pharmaname) > 1:
+                pharmaname = pharmanameCriterion.findall(approvalsentence)
+        #--------This code is exhaustive for multiple pharmaceuticals on the same drug---------
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = 'The FDA granted approvals for the generic versions of ' + drugname + ' to '
+            else:
+                drugstringCondition = 'The FDA granted approvals for the generic versions of ' + ' '.join(drugname) + ' to '
+            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\n|$)'
+            pharmanameCriterion = re.compile(regexCondition,re.M)
+            pharmaname = pharmanameCriterion.findall(text)
+            if len(pharmaname) > 1:
+                pharmaname = pharmanameCriterion.findall(approvalsentence)
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = 'The FDA granted approvals for the ' + drugname + ' to '
+            else:
+                drugstringCondition = 'The FDA granted approvals for the ' + ' '.join(drugname) + ' to '
+            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\n|$)'
+            pharmanameCriterion = re.compile(regexCondition,re.M)
+            pharmaname = pharmanameCriterion.findall(text)
+            if len(pharmaname) > 1:
+                pharmaname = pharmanameCriterion.findall(approvalsentence)
+
+def extract_drugname(text):
+    #this code will definitely find the drug name, you need more control over sentence
+    drugdiscoveryCriterion = re.compile(r'(?<=The FDA granted approval of )(.*?)(?= was | to )',re.M)
+    drugname = drugdiscoveryCriterion.findall(text)
+
+    #---Exception handling when drug name not found------
+    if drugname == []:
+        drugdiscoveryCriterion = re.compile(r'(?<= the approval of )(.*?)(?= was | to )',re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+    if drugname == []:
+        drugdiscoveryCriterion = re.compile(r'(?<= granted Priority Review of )(.*?)(?= was | to )',re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+    if drugname == []:
+        drugdiscoveryCriterion = re.compile(r'(?<=The approval of )(.*?)(?= was | to )',re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+    if drugname == []:
+        drugdiscoveryCriterion = re.compile(r'(?<=Approval of )(.*?)(?= was | were | to )',re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+    if drugname == []:
+        drugdiscoveryCriterion = re.compile(r'(?<= holds the application for )(.*?)(?=\.)',re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+    if drugname == []:
+        drugdiscoveryCriterion = re.compile(r'(?<= approved generic version of )(.*?)(?= is )',re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+    if drugname == []:
+        drugdiscoveryCriterion = re.compile(r'(?<= approvals for the generic version of )(.*?)(?= to )',re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+    if drugname == []:
+        print(text)
+        drugdiscoveryCriterion = re.compile(r'(?<= approvals of )(.*?)(?= to | were )',re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+        print(drugname)
+    if drugname == []:
+        drugdiscoveryCriterion = re.compile(r'(?<= approvals for the )(.*?)(?= to | were | \. )',re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+    if drugname == []:
+        drugdiscoveryCriterion = re.compile(r'(?<=The sponsor of the approved generic version of )(.*?)(?= is )',re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+    if drugname == []:
+        drugdiscoveryCriterion = re.compile(r"(?<= approval of the )(.*?)(?= was )",re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+    if drugname == []:
+        drugdiscoveryCriterion = re.compile(r"(?<= granted )(.*?)(?= to )",re.M)
+        drugname = drugdiscoveryCriterion.findall(text)
+    return drugname
+
+def pharmanamebyRegex(text):
+    #-------Exception handling when drug name not found----------
+    if pharmaname == []:
+        if drugnameLong == True:
+            drugstringCondition = ' approval of ' + drugname + ' was granted to '
+        else:
+            drugstringCondition = ' approval of ' + ' '.join(drugname) + ' was granted to '
+        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
+        pharmanameCriterion = re.compile(regexCondition,re.M)
+        pharmaname = pharmanameCriterion.findall(text)
+    if pharmaname == []:
+        if drugnameLong == True:
+            drugstringCondition = 'The FDA granted the approval of ' + drugname + ' to '
+        else:
+            drugstringCondition = 'The FDA granted the approval of ' + ' '.join(drugname) + ' to '
+        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
+        pharmanameCriterion = re.compile(regexCondition,re.M)
+        pharmaname = pharmanameCriterion.findall(text)
+    if pharmaname == []:
+        if drugnameLong == True:
+            drugstringCondition = 'The FDA granted Priority Review of ' + drugname + ' to '
+        else:
+            drugstringCondition = 'The FDA granted Priority Review of ' + ' '.join(drugname) + ' to '
+        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
+        pharmanameCriterion = re.compile(regexCondition,re.M)
+        pharmaname = pharmanameCriterion.findall(text)
+    if pharmaname == []:
+        if drugnameLong == True:
+            drugstringCondition = ' the approved generic version of ' + drugname + ' is '
+        else:
+            drugstringCondition = ' the approved generic version of ' + ' '.join(drugname) + ' is '
+    if pharmaname == []:
+        if drugnameLong == True:
+            drugstringCondition = ' FDA granted approvals of ' + drugname + ' to '
+        else:
+            drugstringCondition = ' FDA granted approvals of ' + ' '.join(drugname) + ' to '
+    if pharmaname == []:
+        if drugnameLong == True:
+            drugstringCondition = 'The sponsor of the approved generic version of ' + drugname + ' is '
+        else:
+            drugstringCondition = 'The sponsor of the approved generic version of ' + ' '.join(drugname) + ' is '
+        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
+        pharmanameCriterion = re.compile(regexCondition,re.M)
+        pharmaname = pharmanameCriterion.findall(text)
+    if pharmaname == []:
+        if drugnameLong == True:
+            drugstringCondition = 'Approval of ' + drugname + ' was granted to '
+        else:
+            drugstringCondition = 'Approval of ' + ' '.join(drugname) + ' was granted to '
+        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
+        pharmanameCriterion = re.compile(regexCondition,re.M)
+        pharmaname = pharmanameCriterion.findall(text)
+        if len(pharmaname) > 1:
+            pharmaname = pharmanameCriterion.findall(approvalsentence)
+    if pharmaname == []:
+        if drugnameLong == True:
+            drugstringCondition = 'Approval of ' + drugname + ' were granted to '
+        else:
+            drugstringCondition = 'Approval of ' + ' '.join(drugname) + ' were granted to '
+        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
+        pharmanameCriterion = re.compile(regexCondition,re.M)
+        pharmaname = pharmanameCriterion.findall(text)
+        if len(pharmaname) > 1:
+            pharmaname = pharmanameCriterion.findall(approvalsentence)
+    if pharmaname == []:
+        if drugnameLong == True:
+            drugstringCondition = ' approval of ' + drugname + ' was granted to '
+        else:
+            drugstringCondition = ' approval of ' + ' '.join(drugname) + ' was granted to '
+        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
+        pharmanameCriterion = re.compile(regexCondition,re.M)
+        pharmaname = pharmanameCriterion.findall(text)
+        if len(pharmaname) > 1:
+            pharmaname = pharmanameCriterion.findall(approvalsentence)
+        if pharmaname == []:
+            if drugnameLong == True:
+                drugstringCondition = ' approval of the ' + drugname + ' was granted to '
+            else:
+                drugstringCondition = ' approval of the ' + ' '.join(drugname) + ' was granted to '
+            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
+            pharmanameCriterion = re.compile(regexCondition,re.M)
+            pharmaname = pharmanameCriterion.findall(text)
+            if len(pharmaname) > 1:
+                pharmaname = pharmanameCriterion.findall(approvalsentence)
+    if pharmaname == []:
+        if drugnameLong == True:
+            drugstringCondition = 'Approvals of ' + drugname + ' were granted to '
+        else:
+            drugstringCondition = 'Approvals of ' + ' '.join(drugname) + ' were granted to '
+        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
+        pharmaname = pharmanameCriterion.findall(text)
+        if len(pharmaname) > 1:
+            pharmaname = pharmanameCriterion.findall(approvalsentence)
+    if pharmaname == []:
+        regexCondition = r'(?<=\.)(.*?)(?= holds the application )'
+        pharmaname = pharmanameCriterion.findall(text)
+        if len(pharmaname) > 1:
+            pharmaname = pharmanameCriterion.findall(approvalsentence)
+    #--------This code is exhaustive for multiple pharmaceuticals on the same drug---------
+    if pharmaname == []:
+        if drugnameLong == True:
+            drugstringCondition = 'The FDA granted approvals for the generic versions of ' + drugname + ' to '
+        else:
+            drugstringCondition = 'The FDA granted approvals for the generic versions of ' + ' '.join(drugname) + ' to '
+        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\n|$)'
+        pharmanameCriterion = re.compile(regexCondition,re.M)
+        pharmaname = pharmanameCriterion.findall(text)
+        if len(pharmaname) > 1:
+            pharmaname = pharmanameCriterion.findall(approvalsentence)
+    if pharmaname == []:
+        if drugnameLong == True:
+            drugstringCondition = 'The FDA granted approvals for the ' + drugname + ' to '
+        else:
+            drugstringCondition = 'The FDA granted approvals for the ' + ' '.join(drugname) + ' to '
+        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\n|$)'
+        pharmanameCriterion = re.compile(regexCondition,re.M)
+        pharmaname = pharmanameCriterion.findall(text)
+        if len(pharmaname) > 1:
+            pharmaname = pharmanameCriterion.findall(approvalsentence)
+
 def check_approval_sentence(text):
-    if "approves" in text:
+    if "approves" in text or "Approval" in text or "approve" in text or "approval" in text or "granted" in text:
+        return True
+    return False
+
+def check_priority_review(text):
+    if "Priority Review" in text:
+        return True
+    return False
+
+def check_side_effects_sentence(text):
+    if "side effects" in text or "adverse effects" in text or "Side effects" in text or "Adverse effects" in text or "adverse reactions" in text or "Adverse reactions" in text:
         return True
     return False
 
 def lexicon_analysis(text):
-    return
+    word_weight_dictionary = {"constipation": 2, "rash": 2,"anaemia": 3, "diarrhea":2, "dizziness": 2, "drowsiness":2, "headache": 2, "insomnia": 2,"nausea": 2, "fatigue" : 2, "sleeping": 2,"pain": 4, "fever": 5,"hyperphosphatemia": 3,"hypophosphatemia": 3,"hepatotoxicity": 10, "suicidal": 10,"harm": 4, "death": 100 }
+    stop_words=set(stopwords.words("english"))
+    tokenized_word = word_tokenize(text)
+    filtered_sent=[]
+    for w in tokenized_word:
+        if w not in stop_words and w.isalnum():
+            filtered_sent.append(w)
+    fdist = FreqDist(filtered_sent)
+    word_list = fdist.most_common(600)
+    dangerous = 0 #score of side effects
+    for i in range(0,len(word_list)):
+        for key,value in word_weight_dictionary.items():
+            if word_list[i][0].lower() == key:
+                dangerous += word_list[i][1]*value
+    return dangerous
 
 def clean_text(text):
     blankstr = ""
@@ -44,21 +376,19 @@ def extract_text_archived(soup, url,excel_data_pointer, workbook):
 
     # get text
     text = soup.find_all('p')
+    text_copy = text
 
-
-    #Extract company information
-    try:
-        if text_copy[len(text_copy) - 4] == "":
-            approvalsentence = text_copy[len(text_copy) - 6%len(text_copy)].get_text()
-        else:
-            approvalsentence = text_copy[len(text_copy) - 5%len(text_copy)].get_text()
-    except:
-        text = soup.find_all("div")
-        text_copy = text
-        if text_copy[len(text_copy) - 4] == "":
-            approvalsentence = text_copy[len(text_copy) - 6%len(text_copy)].get_text()
-        else:
-            approvalsentence = text_copy[len(text_copy) - 5%len(text_copy)].get_text()
+    #----------------Lexicon Analysis------------------
+    priorityReview = False
+    dangerous = 0
+    approvalsentence = ""
+    for i in range(0,len(text_copy)):
+        if check_side_effects_sentence(text_copy[i].get_text()):
+            dangerous += lexicon_analysis(text_copy[i].get_text())
+        if check_approval_sentence(text_copy[i].get_text()):
+            approvalsentence = text_copy[i].get_text()
+        if priorityReview == False:
+            priorityReview = check_priority_review(text_copy[i].get_text())
 
     #find the date:
     date = ""
@@ -92,6 +422,7 @@ def extract_text_archived(soup, url,excel_data_pointer, workbook):
                     date = date_search[i].next_sibling
 
 
+
             if date == "":
                 date_search = soup.find_all("div").find_all("strong")
                 for i in range(0,len(date_search)):
@@ -100,6 +431,8 @@ def extract_text_archived(soup, url,excel_data_pointer, workbook):
 
         except:
             pass
+    if str(date) == "\r\n\t\t\t\t\t\t10903 New Hampshire Avenue":
+        date = ""
     if date == "":
         try:
             date_search = soup.find('strong')
@@ -107,181 +440,60 @@ def extract_text_archived(soup, url,excel_data_pointer, workbook):
         except:
             pass
     if date == "":
+        try:
+            date_search = soup.find("div", {"class": "main"}).find_all("div")
+            date_search = str(date_search)
+            date_writtenCriterion = re.compile(r'(?<=<div>For Immediate Release: )(.*?)(?=</div>)',re.M)
+            date = date_writtenCriterion.findall(date_search)
+            date = date[0]
+            date = str(date)
+        except:
+            date_search = ""
+
+    if date == "":
         print(date_search)
 
     print("The date is " + str(date))
     text_copy = text
     print("The length of text copy is " + str(len(text_copy)))
+    print("The formatted date is " + repr(str(date)))
     text = clean_text(text)
-    #this code will definitely find the drug name, you need more control over sentence
-    drugdiscoveryCriterion = re.compile(r'(?<=The FDA granted approval of )(.*?)(?= was | to )',re.M)
-    drugname = drugdiscoveryCriterion.findall(text)
 
-    #---Exception handling when drug name not found------
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<= the approval of )(.*?)(?= was | to )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<= granted Priority Review of )(.*?)(?= was | to )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<=The approval of )(.*?)(?= was | to )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<=Approval of )(.*?)(?= was | were | to )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<= holds the application for )(.*?)(?=\.)',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<= approvals for the generic version of )(.*?)(?= to )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<= approvals of )(.*?)(?= to | were )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<= approvals for the )(.*?)(?= to | were )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<=The sponsor of the approved generic version of )(.*?)(?= is )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r"(?<= approval of the )(.*?)(?= was )",re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
+    #----------------Lexicon Analysis------------------
+    dangerous = 0
+    priorityReview = False
+    for i in range(0,len(text_copy)):
+        if check_side_effects_sentence(text_copy[i].get_text()):
+            print(text_copy[i].get_text())
+            dangerous += lexicon_analysis(text_copy[i].get_text())
+            if priorityReview == False:
+                priorityReview = check_priority_review(text_copy[i].get_text())
 
+    print("priority review is " + str(priorityReview))
+
+    drugname = extract_drugname(approvalsentence)
     #-----If Regex caught more than one sentence always make drugname the last one------
     drugnameLong = False
     drugname, drugnameLong = check_drug_name(drugname)
-#------------Finding the name of the pharmaceutical from the text-------------
-    if drugnameLong == True:
-        drugstringCondition = drugstringCondition = 'The FDA granted approval of ' + drugname + ' to '
-    else:
-        drugstringCondition = 'The FDA granted approval of ' + ' '.join(drugname) + ' to '
-    #print(drugname)
-    regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
-    try:
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-    except:
-        pharmaname = [" "]
-    #-------Exception handling when drug name not found----------
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = ' approval of ' + drugname + ' was granted to '
-        else:
-            drugstringCondition = ' approval of ' + ' '.join(drugname) + ' was granted to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'The FDA granted the approval of ' + drugname + ' to '
-        else:
-            drugstringCondition = 'The FDA granted the approval of ' + ' '.join(drugname) + ' to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'The FDA granted Priority Review of ' + drugname + ' to '
-        else:
-            drugstringCondition = 'The FDA granted Priority Review of ' + ' '.join(drugname) + ' to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = ' the approved generic version of ' + drugname + ' is '
-        else:
-            drugstringCondition = ' the approved generic version of ' + ' '.join(drugname) + ' is '
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = ' FDA granted approvals of ' + drugname + ' to '
-        else:
-            drugstringCondition = ' FDA granted approvals of ' + ' '.join(drugname) + ' to '
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'The sponsor of the approved generic version of ' + drugname + ' is '
-        else:
-            drugstringCondition = 'The sponsor of the approved generic version of ' + ' '.join(drugname) + ' is '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'Approval of ' + drugname + ' was granted to '
-        else:
-            drugstringCondition = 'Approval of ' + ' '.join(drugname) + ' was granted to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'Approval of ' + drugname + ' were granted to '
-        else:
-            drugstringCondition = 'Approval of ' + ' '.join(drugname) + ' were granted to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = ' approval of ' + drugname + ' was granted to '
-        else:
-            drugstringCondition = ' approval of ' + ' '.join(drugname) + ' was granted to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
-        if pharmaname == []:
-            if drugnameLong == True:
-                drugstringCondition = ' approval of the ' + drugname + ' was granted to '
-            else:
-                drugstringCondition = ' approval of the ' + ' '.join(drugname) + ' was granted to '
-            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
-            pharmanameCriterion = re.compile(regexCondition,re.M)
-            pharmaname = pharmanameCriterion.findall(text)
-            if len(pharmaname) > 1:
-                pharmaname = pharmanameCriterion.findall(approvalsentence)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'Approvals of ' + drugname + ' were granted to '
-        else:
-            drugstringCondition = 'Approvals of ' + ' '.join(drugname) + ' were granted to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
-    if pharmaname == []:
-        regexCondition = r'(?<=\.)(.*?)(?= holds the application )'
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
-    #--------This code is exhaustive for multiple pharmaceuticals on the same drug---------
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'The FDA granted approvals for the generic versions of ' + drugname + ' to '
-        else:
-            drugstringCondition = 'The FDA granted approvals for the generic versions of ' + ' '.join(drugname) + ' to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\n|$)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'The FDA granted approvals for the ' + drugname + ' to '
-        else:
-            drugstringCondition = 'The FDA granted approvals for the ' + ' '.join(drugname) + ' to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\n|$)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
+
+
+    #----New Pharmacy Name Idea------
+    pharmaname = ""
+    pharmaname = findPharmaName(df, approvalsentence)
+    print("My pharmacy name is " + pharmaname)
+    if pharmaname == "":
+        print("We are on this index " + str(excel_data_pointer))
+    #-----If the approval sentence is wrong-----
+    if pharmaname == "":
+        while(pharmaname == ""):
+            for i in range(0, len(text_copy)):
+                if check_approval_sentence(text_copy[i].get_text()):
+                    approvalsentence = text_copy[i].get_text()
+                    print(approvalsentence)
+                    pharmaname = findPharmaName(df, approvalsentence)
+                    if pharmaname != "":
+                        break
+            pharmaname = "Not Found"
     #-----Debug Print Suite--------
     """
     print("The name of the drug is " + str(drugname))
@@ -298,15 +510,15 @@ def extract_text_archived(soup, url,excel_data_pointer, workbook):
         print(url)
         """
     #-----Add data to excel-------
-    pharmaname = clean_pharmaname(pharmaname)
     sheet.write(excel_data_pointer,0,pharmaname)
     sheet.write(excel_data_pointer,1,date)
-    #sheet.write(excel_data_pointer,2,'Dangerous')
+    sheet.write(excel_data_pointer,2,dangerous)
     sheet.write(excel_data_pointer,3,url)
+    sheet.write(excel_data_pointer,4,priorityReview)
     workbook.save('FDA.xls')
 
 
-def extract_text(soup, url,excel_data_pointer, workbook):
+def extract_text(soup, url,excel_data_pointer, workbook, df):
     # kill all script and style elements
     for script in soup(["script", "style"]):
         script.extract()    # rip it out
@@ -319,178 +531,50 @@ def extract_text(soup, url,excel_data_pointer, workbook):
 
     text = clean_text(text)
 
-    #Extract company information
-    if text_copy[len(text_copy) - 4] == "":
-        approvalsentence = text_copy[len(text_copy) - 6].get_text()
-    else:
-        approvalsentence = text_copy[len(text_copy) - 5].get_text()
+    #----------------Lexicon Analysis------------------
+    priorityReview = False
+    dangerous = 0
+    approvalsentence = ""
+    for i in range(0,len(text_copy)):
+        if check_side_effects_sentence(text_copy[i].get_text()):
+            dangerous += lexicon_analysis(text_copy[i].get_text())
+        if check_approval_sentence(text_copy[i].get_text()):
+            approvalsentence = text_copy[i].get_text()
+        if priorityReview == False:
+            priorityReview = check_priority_review(text_copy[i].get_text())
+    print(dangerous)
+    print("priority review is " + str(priorityReview))
 
     #this code will definitely find the drug name, you need more control over sentence
     drugdiscoveryCriterion = re.compile(r'(?<=The FDA granted approval of )(.*?)(?= was | to )',re.M)
     drugname = drugdiscoveryCriterion.findall(text)
 
     #---Exception handling when drug name not found------
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<= the approval of )(.*?)(?= was | to )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<= granted Priority Review of )(.*?)(?= was | to )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<=The approval of )(.*?)(?= was | to )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<=Approval of )(.*?)(?= was | were | to )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<= holds the application for )(.*?)(?=\.)',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<= approvals for the generic version of )(.*?)(?= to )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<= approvals of )(.*?)(?= to | were )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<= approvals for the )(.*?)(?= to | were )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r'(?<=The sponsor of the approved generic version of )(.*?)(?= is )',re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
-    if drugname == []:
-        drugdiscoveryCriterion = re.compile(r"(?<= approval of the )(.*?)(?= was )",re.M)
-        drugname = drugdiscoveryCriterion.findall(text)
+    drugname = extract_drugname(approvalsentence)
+
 
     #-----If Regex caught more than one sentence always make drugname the last one------
     drugnameLong = False
     drugname, drugnameLong = check_drug_name(drugname)
 #------------Finding the name of the pharmaceutical from the text-------------
-    if drugnameLong == True:
-        drugstringCondition = drugstringCondition = 'The FDA granted approval of ' + drugname + ' to '
-    else:
-        drugstringCondition = 'The FDA granted approval of ' + ' '.join(drugname) + ' to '
-    regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
-    pharmanameCriterion = re.compile(regexCondition,re.M)
-    pharmaname = pharmanameCriterion.findall(text)
 
-    #-------Exception handling when drug name not found----------
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = ' approval of ' + drugname + ' was granted to '
-        else:
-            drugstringCondition = ' approval of ' + ' '.join(drugname) + ' was granted to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'The FDA granted the approval of ' + drugname + ' to '
-        else:
-            drugstringCondition = 'The FDA granted the approval of ' + ' '.join(drugname) + ' to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'The FDA granted Priority Review of ' + drugname + ' to '
-        else:
-            drugstringCondition = 'The FDA granted Priority Review of ' + ' '.join(drugname) + ' to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = ' the approved generic version of ' + drugname + ' is '
-        else:
-            drugstringCondition = ' the approved generic version of ' + ' '.join(drugname) + ' is '
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = ' FDA granted approvals of ' + drugname + ' to '
-        else:
-            drugstringCondition = ' FDA granted approvals of ' + ' '.join(drugname) + ' to '
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'The sponsor of the approved generic version of ' + drugname + ' is '
-        else:
-            drugstringCondition = 'The sponsor of the approved generic version of ' + ' '.join(drugname) + ' is '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'Approval of ' + drugname + ' was granted to '
-        else:
-            drugstringCondition = 'Approval of ' + ' '.join(drugname) + ' was granted to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'Approval of ' + drugname + ' were granted to '
-        else:
-            drugstringCondition = 'Approval of ' + ' '.join(drugname) + ' were granted to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = ' approval of ' + drugname + ' was granted to '
-        else:
-            drugstringCondition = ' approval of ' + ' '.join(drugname) + ' was granted to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
-        if pharmaname == []:
-            if drugnameLong == True:
-                drugstringCondition = ' approval of the ' + drugname + ' was granted to '
-            else:
-                drugstringCondition = ' approval of the ' + ' '.join(drugname) + ' was granted to '
-            regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
-            pharmanameCriterion = re.compile(regexCondition,re.M)
-            pharmaname = pharmanameCriterion.findall(text)
-            if len(pharmaname) > 1:
-                pharmaname = pharmanameCriterion.findall(approvalsentence)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'Approvals of ' + drugname + ' were granted to '
-        else:
-            drugstringCondition = 'Approvals of ' + ' '.join(drugname) + ' were granted to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=,|\.)'
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
-    if pharmaname == []:
-        regexCondition = r'(?<=\.)(.*?)(?= holds the application )'
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
-    #--------This code is exhaustive for multiple pharmaceuticals on the same drug---------
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'The FDA granted approvals for the generic versions of ' + drugname + ' to '
-        else:
-            drugstringCondition = 'The FDA granted approvals for the generic versions of ' + ' '.join(drugname) + ' to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\n|$)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
-    if pharmaname == []:
-        if drugnameLong == True:
-            drugstringCondition = 'The FDA granted approvals for the ' + drugname + ' to '
-        else:
-            drugstringCondition = 'The FDA granted approvals for the ' + ' '.join(drugname) + ' to '
-        regexCondition = r'(?<='+drugstringCondition+')(.*?)(?=\n|$)'
-        pharmanameCriterion = re.compile(regexCondition,re.M)
-        pharmaname = pharmanameCriterion.findall(text)
-        if len(pharmaname) > 1:
-            pharmaname = pharmanameCriterion.findall(approvalsentence)
+    #------New Logic for Pharmaname--------
+    pharmaname = ""
+    pharmaname = findPharmaName(df, approvalsentence)
+    print("My pharmacy name is " + pharmaname)
+    if pharmaname == "":
+        print("We are on this index " + str(excel_data_pointer))
+    #-----If the approval sentence is wrong-----
+    if pharmaname == "":
+        while(pharmaname == ""):
+            for i in range(0, len(text_copy)):
+                if check_approval_sentence(text_copy[i].get_text()):
+                    approvalsentence = text_copy[i].get_text()
+                    print(approvalsentence)
+                    pharmaname = findPharmaName(df, approvalsentence)
+                    if pharmaname != "":
+                        break
+            pharmaname = "Not Found"
     #-----Debug Print Suite--------
     """
     print("The name of the drug is " + str(drugname))
@@ -506,11 +590,11 @@ def extract_text(soup, url,excel_data_pointer, workbook):
         print(url)
 
     #-----Add data to excel-------
-    pharmaname = clean_pharmaname(pharmaname)
     sheet.write(excel_data_pointer,0,pharmaname)
     sheet.write(excel_data_pointer,1,date)
-    #sheet.write(excel_data_pointer,2,'Dangerous')
+    sheet.write(excel_data_pointer,2,dangerous)
     sheet.write(excel_data_pointer,3,url)
+    sheet.write(excel_data_pointer,4,priorityReview)
     workbook.save('FDA.xls')
 
 def extract_archive_byURL(url,sheet,excel_data_pointer):
@@ -545,10 +629,16 @@ sheet.write(0,0,'Pharmacy Name')
 sheet.write(0,1,'Date')
 sheet.write(0,2,'Dangerous')
 sheet.write(0,3,'URL')
+sheet.write(0,4,'Priority Review')
 
 #Gather all the urls
 excel_data_pointer = 1
-"""
+
+#-----Read the names of all the pharmaceutical companies--------
+data = pd.read_excel("pharmanames.xlsx")
+df = data['Pharmacy Name'].values.tolist()
+print(df)
+
 #----------------This is to gather 2018/2020 data---------------
 for i in range(0,69):
     fdapage = requests.get("https://www.fda.gov/news-events/fda-newsroom/press-announcements?page=" + str(i))
@@ -563,21 +653,22 @@ for i in range(0,69):
         if urls is not set():
             temppage = requests.get(abs_url)
             tempsoup = BeautifulSoup(temppage.content,'lxml')
-            extract_text(tempsoup,abs_url,excel_data_pointer,wb)
+            extract_text(tempsoup,abs_url,excel_data_pointer,wb,df)
             urls.add(abs_url)
             excel_data_pointer += 1
-"""
+
+
 #-----TODO: Add a script on 2013-2017 data------------
 url_2017 = "https://wayback.archive-it.org/7993/20190422152747/https://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/2017/default.htm"
 #This part will extract 2013-2017 data
-#excel_data_pointer = extract_archive_byURL(url_2017,sheet,excel_data_pointer)
+excel_data_pointer = extract_archive_byURL(url_2017,sheet,excel_data_pointer)
 #This part will extract 2013-2016
 url_2016 = "https://wayback.archive-it.org/7993/20170111002425/http://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/2016/default.htm"
 url_2015 = "https://wayback.archive-it.org/7993/20170111002435/http://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/2015/default.htm"
 url_2014 = "https://wayback.archive-it.org/7993/20170111002446/http://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/2014/default.htm"
 url_2013 = "https://wayback.archive-it.org/7993/20170111002457/http://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/2013/default.htm"
-#excel_data_pointer = extract_archive_byURL(url_2016,sheet,excel_data_pointer)
-#excel_data_pointer = extract_archive_byURL(url_2015,sheet,excel_data_pointer)
+excel_data_pointer = extract_archive_byURL(url_2016,sheet,excel_data_pointer)
+excel_data_pointer = extract_archive_byURL(url_2015,sheet,excel_data_pointer)
 excel_data_pointer = extract_archive_byURL(url_2014,sheet,excel_data_pointer)
 excel_data_pointer = extract_archive_byURL(url_2013,sheet,excel_data_pointer)
 #Extract the text in each URL and build the Text classification tool
