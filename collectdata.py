@@ -12,6 +12,21 @@ import pandas as pd
 from xlwt import Workbook
 
 
+def divnamesCriterion(listofnames):
+    if len(listofnames) == 0:
+        return ""
+    if len(listofnames) == 1:
+        return listofnames[0]
+    return max(listofnames)
+
+def findPharmaNamedivs(pharmanames,text):
+    ##This Usually returns a lot of names##
+    listofnames = []
+    for i in range(0, len(pharmanames)):
+        if pharmanames[i].upper() in text.upper():
+            listofnames.append(pharmanames[i])
+    return listofnames
+
 def findPharmaName(pharmanames, text):
     for i in range(0, len(pharmanames)):
         if pharmanames[i].upper() in text.upper():
@@ -486,30 +501,68 @@ def extract_text_archived(soup, url,excel_data_pointer, workbook):
     #----New Pharmacy Name Idea------
     pharmaname = ""
     pharmaname = findPharmaName(df, approvalsentence)
-    print("My pharmacy name is " + pharmaname)
-    if pharmaname == "":
-        print("We are on this index " + str(excel_data_pointer))
     #-----If the approval sentence is wrong-----
     if pharmaname == "":
         while(pharmaname == ""):
             for i in range(0, len(text_copy)):
                 if check_approval_sentence(text_copy[i].get_text()):
                     approvalsentence = text_copy[i].get_text()
-                    print(approvalsentence)
                     pharmaname = findPharmaName(df, approvalsentence)
+
                     if pharmaname != "":
                         break
+            pharmaname = "Not Found"
+        for i in range(0, len(text_copy)):
+            pharmaname = findPharmaName(df,text_copy[i].get_text())
+        if pharmaname == "":
             pharmaname = "Not Found"
     if pharmaname == "Not Found":
         while(pharmaname == "Not Found"):
             for i in range(0, len(text_copy)):
                 if check_approval_sentence(text_copy[i].get_text()):
                     approvalsentence = text_copy[i].get_text()
-                    print(approvalsentence)
                     pharmaname = findPharmaNamebyfirstname(df, approvalsentence)
                     if pharmaname != "Not Found":
                         break
             pharmaname = "Not Found Again"
+    #-----We finally hit a case where it wasn't in the paragraphs and is under div now!------
+    if pharmaname == "Not Found Again":
+        try:
+            text_copy = soup.find_all('div')
+        except:
+            pass
+        for i in range(0,len(text_copy)):
+            if check_approval_sentence(text_copy[i].get_text()):
+                approvalsentence = text_copy[i].get_text()
+        #----New Pharmacy Name Idea------
+        pharmaname = ""
+        pharmaname = findPharmaNamedivs(df, approvalsentence)
+        pharmaname = divnamesCriterion(pharmaname)
+        #-----If the approval sentence is wrong-----
+        if pharmaname == "":
+            while(pharmaname == ""):
+                for i in range(0, len(text_copy)):
+                    if check_approval_sentence(text_copy[i].get_text()):
+                        approvalsentence = text_copy[i].get_text()
+                        pharmaname = findPharmaNamedivs(df, approvalsentence)
+                        pharmaname = divnamesCriterion(pharmaname)
+                        if pharmaname != "":
+                            break
+                pharmaname = "Not Found"
+            for i in range(0, len(text_copy)):
+                pharmaname = findPharmaNamedivs(df,text_copy[i].get_text())
+                pharmaname = divnamesCriterion(pharmaname)
+            if pharmaname == "":
+                pharmaname = "Not Found"
+        if pharmaname == "Not Found":
+            while(pharmaname == "Not Found"):
+                for i in range(0, len(text_copy)):
+                    if check_approval_sentence(text_copy[i].get_text()):
+                        approvalsentence = text_copy[i].get_text()
+                        pharmaname = findPharmaNamebyfirstname(df, approvalsentence)
+                        if pharmaname != "Not Found":
+                            break
+                pharmaname = "Not Found Again"
     #-----Debug Print Suite--------
     """
     print("The name of the drug is " + str(drugname))
