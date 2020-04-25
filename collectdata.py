@@ -324,7 +324,7 @@ def pharmanamebyRegex(text):
             pharmaname = pharmanameCriterion.findall(approvalsentence)
 
 def check_approval_sentence(text):
-    if "approves" in text or "Approval" in text or "approve" in text or "approval" in text or "granted" in text:
+    if "approves" in text or "Approval" in text or "approve" in text or "approval" in text or "granted" in text or "distributed" in text or "marketed" in text or "manufactured" in text or "made" in text or "developed" in text:
         return True
     return False
 

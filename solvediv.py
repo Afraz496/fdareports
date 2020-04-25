@@ -13,25 +13,10 @@ from xlwt import Workbook
 
 COUNTER = 0
 
-def divnamesCriterion(listofnames):
-    if len(listofnames) == 0:
-        return ""
-    if len(listofnames) == 1:
-        return listofnames[0]
-    return max(listofnames)
-
 def check_approval_sentence(text):
     if "approves" in text or "Approval" in text or "approve" in text or "approval" in text or "granted" in text or "distributed" in text or "marketed" in text or "manufactured" in text or "made" in text or "developed" in text:
         return True
     return False
-
-def findPharmaNamedivs(pharmanames,text):
-    ##This Usually returns a lot of names##
-    listofnames = []
-    for i in range(0, len(pharmanames)):
-        if pharmanames[i].upper() in text.upper():
-            listofnames.append(pharmanames[i])
-    return listofnames
 
 def findPharmaName(pharmanames, text):
     for i in range(0, len(pharmanames)):
@@ -96,6 +81,7 @@ def extract_data(df,url):
     if pharmaname == "Not Found Again":
         try:
             text_copy = soup.find_all('div')
+            print(text_copy)
         except:
             pass
         for i in range(0,len(text_copy)):
@@ -103,22 +89,20 @@ def extract_data(df,url):
                 approvalsentence = text_copy[i].get_text()
         #----New Pharmacy Name Idea------
         pharmaname = ""
-        pharmaname = findPharmaNamedivs(df, approvalsentence)
-        pharmaname = divnamesCriterion(pharmaname)
+        pharmaname = findPharmaName(df, approvalsentence)
         #-----If the approval sentence is wrong-----
         if pharmaname == "":
             while(pharmaname == ""):
                 for i in range(0, len(text_copy)):
                     if check_approval_sentence(text_copy[i].get_text()):
                         approvalsentence = text_copy[i].get_text()
-                        pharmaname = findPharmaNamedivs(df, approvalsentence)
-                        pharmaname = divnamesCriterion(pharmaname)
+                        pharmaname = findPharmaName(df, approvalsentence)
+
                         if pharmaname != "":
                             break
                 pharmaname = "Not Found"
             for i in range(0, len(text_copy)):
-                pharmaname = findPharmaNamedivs(df,text_copy[i].get_text())
-                pharmaname = divnamesCriterion(pharmaname)
+                pharmaname = findPharmaName(df,text_copy[i].get_text())
             if pharmaname == "":
                 pharmaname = "Not Found"
         if pharmaname == "Not Found":
@@ -130,15 +114,15 @@ def extract_data(df,url):
                         if pharmaname != "Not Found":
                             break
                 pharmaname = "Not Found Again"
-    if pharmaname != "ANIMA" and pharmaname != "ECR":
+    if pharmaname == "Not Found Again":
         COUNTER += 1
-        print("Count is " + str(COUNTER))
+        print("Count: " + str(COUNTER))
         print("My pharmacy name is " + pharmaname)
         print("URL is " + url)
+    print(pharmaname)
 
 data = pd.read_excel("listofpharmacies.xls")
 df = data['Pharmacy Name'].values.tolist()
 data = pd.read_excel("problematicpharmanames.xlsx")
-df2 = data['URL'].values.tolist()
-for i in range(0, len(df2)):
-    extract_data(df,df2[i])
+url = "https://wayback.archive-it.org/7993/20170112213533/http://www.fda.gov/NewsEvents/Newsroom/PressAnnouncements/ucm350026.htm"
+extract_data(df, url)
