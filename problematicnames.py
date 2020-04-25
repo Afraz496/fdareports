@@ -130,11 +130,11 @@ def extract_data(df,url):
                         if pharmaname != "Not Found":
                             break
                 pharmaname = "Not Found Again"
-    if pharmaname != "ANIMA" and pharmaname != "ECR":
-        COUNTER += 1
-        print("Count is " + str(COUNTER))
-        print("My pharmacy name is " + pharmaname)
-        print("URL is " + url)
+
+    COUNTER += 1
+    print("Count is " + str(COUNTER))
+    print("My pharmacy name is " + pharmaname)
+    print("URL is " + url)
 
 data = pd.read_excel("listofpharmacies.xls")
 df = data['Pharmacy Name'].values.tolist()
